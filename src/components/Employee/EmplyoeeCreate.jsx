@@ -1,9 +1,10 @@
 import moment from "moment/moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const AGE = Array.from(Array(71).keys()).filter((x) => x > 20);
 
-const EmplyoeeCreate = ({ employeeCreateProps: { setShowTable, addEmployee } }) => {
+const EmplyoeeCreate = ({ employeeCreateProps }) => {
+  const { setShowTable, editSwitch } = employeeCreateProps;
   const [employeeData, setEmployeeData] = useState({
     firstName: "",
     lastName: "",
@@ -16,10 +17,31 @@ const EmplyoeeCreate = ({ employeeCreateProps: { setShowTable, addEmployee } }) 
   });
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    if (editSwitch) {
+      const { selectedEmployeeData } = employeeCreateProps;
+      setEmployeeData({ ...selectedEmployeeData });
+      return;
+    }
+
+    return () => {
+      setEmployeeData({
+        firstName: "",
+        lastName: "",
+        Age: 21,
+        title: "Employee",
+        dateOfJoining: moment(new Date()).format("YYYY-MM-DD"),
+        department: "IT",
+        employeeType: "FullTime",
+        currentStatus: 1,
+      });
+    };
+  }, []);
+
   const onEmployeeDataChange = (name, value) => {
     let newErrors = errors;
     delete newErrors[name];
-    setErrors((prevErrors) => ({ ...newErrors }));
+    setErrors({ ...newErrors });
     switch (name) {
       case "firstName":
         let firstNameError =
@@ -49,7 +71,10 @@ const EmplyoeeCreate = ({ employeeCreateProps: { setShowTable, addEmployee } }) 
   };
 
   const onFormSubmit = (e) => {
+    const { addEmployee } = employeeCreateProps;
     e.preventDefault();
+
+    // checking for joining date validation
     let dateOfJoiningError =
       new Date(employeeData.dateOfJoining) < Date.now() ? "Date of joining must be equal to or greater that today's date." : "";
     if (dateOfJoiningError !== "") {
@@ -57,14 +82,20 @@ const EmplyoeeCreate = ({ employeeCreateProps: { setShowTable, addEmployee } }) 
     }
     console.log(errors);
     if (Object.keys(errors).length > 0) return;
+    if (editSwitch) {
+      const { editEmployee } = employeeCreateProps;
+      editEmployee(employeeData);
+      setShowTable(() => true);
+      return;
+    }
     addEmployee(employeeData);
     setShowTable(() => true);
-    return;
   };
 
+  console.log("loading editSwitch");
   return (
     <div className="w-75 pt-5 border p-5 shadow-lg">
-      <h1 className="text-center pb-5">Create Employee Record</h1>
+      <h1 className="text-center pb-5">{`${editSwitch ? "Edit Employee Record" : "Create Employee Record"}`} </h1>
       <form onSubmit={onFormSubmit} className="row g-3">
         <div className="col-md-6">
           <label className="form-label">FirstName</label>

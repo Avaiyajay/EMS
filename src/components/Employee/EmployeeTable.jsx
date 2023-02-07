@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const EmployeeTable = ({ employeeTableProps: { setShowTable, employeeList, deleteEmployee } }) => {
+const EmployeeTable = ({ employeeTableProps: { setShowTable, employeeList, deleteEmployee, setEdit } }) => {
   return (
     <>
       <div className="w-75">
@@ -43,7 +43,10 @@ const EmployeeTable = ({ employeeTableProps: { setShowTable, employeeList, delet
                       className="btn btn-success"
                       data-toggle="modal"
                       data-target="#exampleModalCenter"
-                      onClick={() => setEdit({ status: true, employeeId: employeeDetails.id })}
+                      onClick={() => {
+                        setShowTable(false);
+                        setEdit({ status: true, employeeId: employeeDetails.id });
+                      }}
                     >
                       <img style={{ height: "20px", width: "20px" }} src="/images/edit.png" alt="" />
                     </button>

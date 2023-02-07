@@ -19,7 +19,13 @@ const Employee = () => {
   };
 
   const editEmployee = (employeeData) => {
-    //
+    setEdit(() => ({ ...edit, status: false }));
+    setEmployeeList((prevEmployeeList) => {
+      return prevEmployeeList.map((x) => {
+        if (x.id === employeeData.id) return { ...employeeData };
+        return x;
+      });
+    });
   };
 
   const deleteEmployee = (id) => {
@@ -37,15 +43,17 @@ const Employee = () => {
   const employeeCreateProps = {
     setShowTable,
     addEmployee,
-    edit,
+    editSwitch: edit.status,
   };
 
   const employeeEditProps = {
     setShowTable,
     editEmployee,
-    edit,
-    selectedEmployeeData: employeeList.filter((x) => x.id === edit.employeeId),
+    editSwitch: edit.status,
+    selectedEmployeeData: employeeList.filter((x) => x.id === edit.employeeId)[0],
   };
+
+  console.log(edit);
 
   return (
     <>
