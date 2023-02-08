@@ -1,15 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import EmployeeSearch from "./EmployeeSearch";
 import EmployeeTable from "./EmployeeTable";
 import EmplyoeeCreate from "./EmplyoeeCreate";
 
 const Employee = () => {
   const [showTable, setShowTable] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
   const [edit, setEdit] = useState({
     status: false,
     employeeId: "",
   });
   const [employeeList, setEmployeeList] = useState([]);
+  const [searchResult, setSearchResult] = useState([]);
+
+  useEffect(() => {
+    setSearchResult(
+      employeeList.filter((x) => {
+        if (x.firstName.includes(searchQuery) || x.lastName.includes(searchQuery)) {
+          return x;
+        }
+      })
+    );
+  }, [searchQuery]);
 
   const addEmployee = (employeeData) => {
     // call the api here and if you get success response then do below step
@@ -35,7 +47,7 @@ const Employee = () => {
 
   const employeeTableProps = {
     setShowTable,
-    employeeList,
+    employeeList: searchQuery !== "" ? searchResult : employeeList,
     setEdit,
     deleteEmployee,
   };
@@ -53,14 +65,12 @@ const Employee = () => {
     selectedEmployeeData: employeeList.filter((x) => x.id === edit.employeeId)[0],
   };
 
-  console.log(edit);
-
   return (
     <>
-      <div className="w-100 vh-100 d-flex flex-column justify-content-center align-items-center">
+      <EmployeeSearch searchQuery={searchQuery} setSearchQuery={setSearchQuery} className="pb-5" />
+      <div className="w-100 pt-5 d-flex flex-column justify-content-center align-items-center">
         {showTable ? (
           <>
-            <EmployeeSearch />
             <EmployeeTable employeeTableProps={employeeTableProps} />
           </>
         ) : !edit.status ? (
