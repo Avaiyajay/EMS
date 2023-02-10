@@ -92,7 +92,6 @@ const EmplyoeeCreate = ({ employeeCreateProps }) => {
     setShowTable(() => true);
   };
 
-  console.log("loading editSwitch");
   return (
     <div className="w-75 pt-5 border p-5 shadow-lg">
       <h1 className="text-center pb-5">{`${editSwitch ? "Edit Employee Record" : "Create Employee Record"}`} </h1>
