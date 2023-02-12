@@ -93,7 +93,14 @@ const EmplyoeeCreate = ({ employeeCreateProps }) => {
   };
 
   return (
-    <div className="w-75 pt-5 border p-5 shadow-lg">
+    <div className="w-75 pt-5 border p-5 shadow-lg position-relative">
+      <button
+        onClick={() => setShowTable(true)}
+        className="position-absolute top-2 badge text-bg-light border border-light"
+        style={{ right: "20px" }}
+      >
+        <img style={{ height: "20px", width: "20px" }} src="/images/cancel.png" alt="" />
+      </button>
       <h1 className="text-center pb-5">{`${editSwitch ? "Edit Employee Record" : "Create Employee Record"}`} </h1>
       <form onSubmit={onFormSubmit} className="row g-3">
         <div className="col-md-6">

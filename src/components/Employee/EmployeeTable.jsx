@@ -11,6 +11,10 @@ const EmployeeTable = ({ employeeTableProps: { setShowTable, employeeList, delet
   });
 
   useEffect(() => {
+    document.getElementById("filter").style.visibility = "hidden";
+  }, []);
+
+  useEffect(() => {
     console.log(filterOptions);
     const { department, employeeType, title } = filterOptions;
     return setFilteredData(() => {
